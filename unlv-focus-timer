@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UNLV Focus Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fafafa;
+      color: #333;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #b10202; /* UNLV Scarlet */
+    }
+    #timer {
+      font-size: 4rem;
+      margin: 2rem 0;
+      color: #555;
+    }
+    button {
+      padding: 0.7rem 1.5rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+      background-color: #b10202;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #880000;
+    }
+  </style>
+</head>
+<body>
+  <h1>UNLV Focus Timer</h1>
+  <div id="timer">25:00</div>
+  <button onclick="startTimer()">Start</button>
+  <button onclick="resetTimer()">Reset</button>
+  <audio id="chime" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b8f2fd3968.mp3?filename=clock-alarm-8761.mp3" preload="auto"></audio>
+
+  <script>
+    let timer;
+    let timeLeft = 25 * 60;
+
+    function updateDisplay() {
+      const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      const seconds = (timeLeft % 60).toString().padStart(2, '0');
+      document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+    }
+
+    function startTimer() {
+      if (timer) return;
+      timer = setInterval(() => {
+        timeLeft--;
+        updateDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          timer = null;
+          document.getElementById('chime').play();
+          alert("Time's up! Take a break!");
+          timeLeft = 25 * 60;
+          updateDisplay();
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = null;
+      timeLeft = 25 * 60;
+      updateDisplay();
+    }
+
+    updateDisplay();
+  </script>
+</body>
+</html>
